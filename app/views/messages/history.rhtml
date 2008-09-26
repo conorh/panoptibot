@@ -1,0 +1,24 @@
+<html>
+</html>
+<body>
+  <table>
+    <% for user in @users %>
+    <tr>
+      <td><%= user.nick %></td>
+      <td><%= user.status %></td>
+    </tr>
+    <% end %>
+  </table>
+
+
+  <table width="80%">
+    <% for message in @history %>
+      <tr>
+        <td width="80"><b><%= message.created_at.strftime("%a %H:%M") %></b></td>   
+        <td width="80"><b><%= message.nick || message.im_userid %></b></td>
+        <td><%= message.body.gsub("\n","<br/>") %></td>
+      </tr>
+   <% end %>
+  </table>
+</body>
+</html>

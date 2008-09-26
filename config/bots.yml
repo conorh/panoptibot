@@ -1,0 +1,11 @@
+development:
+  username: someone@gmail.com
+  password: someone
+
+test:
+  username: 
+  password: 
+
+production:
+    username: 
+    password:

@@ -1,0 +1,88 @@
+--- !ruby/object:Gem::Specification 
+name: xmpp4r-simple
+version: !ruby/object:Gem::Version 
+  version: 0.8.8
+platform: ruby
+authors: 
+- Blaine Cook
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2008-07-30 00:00:00 -04:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: xmpp4r
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 0.3.2
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: rake
+  type: :development
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: "0"
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: rcov
+  type: :development
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: "0"
+    version: 
+description: Jabber::Simple takes the strong foundation laid by xmpp4r and hides the relatively high complexity of maintaining a simple instant messenger bot in Ruby.
+email: romeda@gmail.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: 
+- README
+- COPYING
+files: 
+- test/test_xmpp4r_simple.rb
+- lib/xmpp4r-simple.rb
+- README
+- COPYING
+- CHANGELOG
+has_rdoc: true
+homepage: http://xmpp4r-simple.rubyforge.org/
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- bin
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: xmpp4r-simple
+rubygems_version: 1.3.0
+signing_key: 
+specification_version: 2
+summary: A simplified Jabber client library.
+test_files: 
+- test/test_xmpp4r_simple.rb

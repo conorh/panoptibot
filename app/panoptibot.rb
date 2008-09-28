@@ -5,8 +5,8 @@ require 'xmpp4r-simple'
 require 'yaml'
 require 'logger'
 
-BASE_URL = "http://chambers.streeteasy.com/streetbot/messages"
-BOT_NAME = "streetbot"
+BASE_URL = "http://someserver/bot/messages"
+BOT_NAME = "panoptibot"
 
 bot_config = YAML.load_file(RAILS_ROOT + '/config/bots.yml')[RAILS_ENV].symbolize_keys
 @jabber = Jabber::Simple.new(bot_config[:username], bot_config[:password])

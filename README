@@ -1,1 +1,25 @@
-== PANOPTIBOT
+== PANOPTIBOT ==
+
+A very simple Jabber (XMPP) chat room bot. At the core it receives messages from participants and echoes the messages to the other participants. It functions pretty much like an IRC channel. It uses the XMPP4r-simple and XMPP4r libraries.
+
+Features:
+* Keeps a history of the chat in a database.
+* Supports commands like:
+  /who - who is online currently
+  /nick - change your nickname displayed to the other participants
+  /quiet - stop receiving messages temporarily (and /resume)
+  /history - show a history of the chat
+  /search - search the history of the chat. 
+* Web interface with login for browsing the chat history.
+
+== Usage ==
+
+1. Edit bots.yml and enter a user id and password for the bot. The user id should be the Jabber address - so an example for a gTalk account would be someuser@gmail.com
+2. Run the bot script ruby app/panoptibot.
+3. Add yourself to the bot by using ruby script/console (after this you can add user to the bot using the /add command on the bot.)
+  conorhunt:~/Code/Rails/panoptibot (master)$ ruby script/console
+  Loading development environment (Rails 2.1.1)
+  >> User.create(:login => "someuser@gmail.com", :password => "somepassword", :password_confirmation => "somepassword")
+  => #<User id: 2, login: "someuser@gmail.com", status: "offline", nick: nil, email: nil ....
+  >> exit
+4. Add the bot user as a 'friend' (register for presence notifications) using your IM client.

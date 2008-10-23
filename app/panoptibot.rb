@@ -32,11 +32,6 @@ def bot_user
   bot ||= User.new(:login => BOT_NAME, :nick => BOT_NAME)
 end
 
-def log(message)
-  @logger ||= Logger.new(RAILS_ROOT + "/log/bot-#{RAILS_ENV}.log")
-  @logger.info("[#{Time.now}] #{message}")
-end
-
 def parse_command(message, user)
   # if the message starts with a / and has the format '/command option'
   if(message =~ /^(\/.*?)(?:\s|$)(.*)/ )
@@ -134,6 +129,17 @@ def send_message(to, body, from = nil)
   @jabber.deliver(to.login, message)
 end
 
+if STDIN.isatty
+  logger = Logger.new(STDERR)
+  if RAILS_ENV == "production"
+    logger.level = Logger::INFO
+  else
+    logger.level = Logger::DEBUG
+  end
+  Object.send :remove_const, :RAILS_DEFAULT_LOGGER
+  Object.const_set :RAILS_DEFAULT_LOGGER, logger
+  RAILS_DEFAULT_LOGGER.info("Starting Panoptibot")
+end
 
 ##################
 # Main server loop
@@ -143,12 +149,13 @@ while true
 
   begin
     while @jabber.connected? != true
-      log("disconnected - trying to recconect")
+      RAILS_DEFAULT_LOGGER.info("Panoptibot: Disconnected - trying to reconnect")
       @jabber.connect
       sleep 30 unless jabber.connected?
     end
     
     @jabber.received_messages do |msg|
+      RAILS_DEFAULT_LOGGER.debug("Panoptibot: Received Message of type #{msg.type}")
       next unless msg.type == :chat
     
       from_user = User.find_by_login(msg.from.strip.to_s)
@@ -165,21 +172,21 @@ while true
   
     @jabber.new_subscriptions do |user_id, presence|
       user_id = user_id.jid.to_s
-      log("new user req - #{user_id}")
+      RAILS_DEFAULT_LOGGER.info("Panoptibot: new user req - #{user_id}")
     
       # Add a user only if they are in the DB
       add_user(user_id) if(User.find_by_login(user_id))
     end
   
     @jabber.subscription_requests do |user_id, presence|
-      log("sub request from #{user_id}: #{presence}")
+      RAILS_DEFAULT_LOGGER.info("Panoptibot: sub request from #{user_id}: #{presence}")
     
       # Add a user only if they are in the DB
       add_user(user_id) if(User.find_by_login(user_id))
     end 
   
     @jabber.presence_updates do |user_id, new_presence|
-      log("presence update #{user_id} - #{new_presence}")
+      RAILS_DEFAULT_LOGGER.info("Panoptibot: presence update #{user_id} - #{new_presence}")
 
       from_user = User.find_by_login(user_id)
       remove_user(user_id) unless from_user
@@ -188,7 +195,7 @@ while true
          old_presence = from_user.status
          from_user.update_attribute(:status, new_presence)
 
-         log("presence update success #{user_id} - #{new_presence}")
+         RAILS_DEFAULT_LOGGER.info("Panoptibot: presence update success #{user_id} - #{new_presence}")
        
          if(old_presence == 'unavailable' and can_send_message?(new_presence))
            users = online_users.collect {|u| u.nick || u.login }
@@ -203,6 +210,6 @@ while true
   
     sleep 2
   rescue StandardError => e
-    log("bot error - #{e.message}\n#{e.backtrace.join("\n")}")
+    RAILS_DEFAULT_LOGGER.debug("Panoptibot error: #{e.message}\n#{e.backtrace.join("\n")}")
   end
 end

@@ -5,8 +5,8 @@ require 'xmpp4r-simple'
 require 'yaml'
 require 'logger'
 
-BASE_URL = "http://someserver/bot/messages"
-BOT_NAME = "panoptibot"
+BASE_URL = "http://someserver/bot/messages" unless Object.const_defined? :BASE_URL
+BOT_NAME = "panoptibot" unless Object.const_defined? :BOT_NAME
 
 if ENV['HOME'] && File.exist?(File.join(ENV['HOME'], '.panoptibot.yml'))
   config_file = File.join(ENV['HOME'], '.panoptibot.yml')

@@ -8,7 +8,13 @@ require 'logger'
 BASE_URL = "http://someserver/bot/messages"
 BOT_NAME = "panoptibot"
 
-bot_config = YAML.load_file(RAILS_ROOT + '/config/bots.yml')[RAILS_ENV].symbolize_keys
+if ENV['HOME'] && File.exist?(File.join(ENV['HOME'], '.panoptibot.yml'))
+  config_file = File.join(ENV['HOME'], '.panoptibot.yml')
+else
+  config_file = File.join(RAILS_ROOT, 'config', 'bots.yml')
+end
+bot_config = YAML.load_file(config_file)[RAILS_ENV].symbolize_keys
+
 @jabber = Jabber::Simple.new(bot_config[:username], bot_config[:password])
 
 HELP_MESSAGE = "commands are /hist [1,1..100], /nick [new nick name], /who, /quiet, /resume, /search [string]"

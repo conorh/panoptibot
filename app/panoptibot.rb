@@ -213,7 +213,7 @@ while true
            send_message(user_id, "Hello komrade, I am currently monitoring: #{users.join(", ")}")
            send_message(user_id, "History at #{BASE_URL}/messages or /h")
            send_message(user_id, "Last 10 messages")
-           messge += Messages.history(10).collect {|m| m.to_s }.join("\n")
+           message = Messages.history(10).collect {|m| m.to_s }.join("\n")
            send_message(user_id, message)
          end
       end

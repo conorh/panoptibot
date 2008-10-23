@@ -113,6 +113,8 @@ end
 
 def send_message(to, body, from = nil)
   from ||= bot_user
+  to = to.login if to.respond_to? :login
+  
   message = Jabber::Message.new
   message.body = "#{from.nick}: #{body}"
   message.type = :chat
@@ -126,7 +128,7 @@ def send_message(to, body, from = nil)
   b.add(t)
   h.add(b)
   message.add_element(h)
-  @jabber.deliver(to.login, message)
+  @jabber.deliver(to, message)
 end
 
 if STDIN.isatty

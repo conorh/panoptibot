@@ -15,11 +15,12 @@ Features:
 == Usage ==
 
 1. Edit bots.yml and enter a user id and password for the bot. The user id should be the Jabber address - so an example for a gTalk account would be someuser@gmail.com
-2. Run the bot script ruby app/panoptibot.
-3. Add yourself to the bot by using ruby script/console (after this you can add user to the bot using the /add command on the bot.)
+2. Run "rake db/migrate" to create your local database (using sqlite, or change database.yml to suit your needs)
+3. Run the bot script ruby app/panoptibot.
+4. Add yourself to the bot by using ruby script/console (after this you can add user to the bot using the /add command on the bot.)
   conorhunt:~/Code/Rails/panoptibot (master)$ ruby script/console
   Loading development environment (Rails 2.1.1)
   >> User.create(:login => "someuser@gmail.com", :password => "somepassword", :password_confirmation => "somepassword")
   => #<User id: 2, login: "someuser@gmail.com", status: "offline", nick: nil, email: nil ....
   >> exit
-4. Add the bot user as a 'friend' (register for presence notifications) using your IM client.
+5. Add the bot user as a 'friend' (register for presence notifications) using your IM client.

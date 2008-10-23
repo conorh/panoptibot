@@ -18,7 +18,7 @@ bot_config = YAML.load_file(config_file)[RAILS_ENV].symbolize_keys
 @jabber = Jabber::Simple.new(bot_config[:username], bot_config[:password])
 
 HELP_MESSAGE = "commands are /hist [1,1..100], /nick [new nick name], /who, /quiet, /resume, /search [string]"
-SEND_MESSAGE_STATUSES = ['online', 'dnd', 'away']
+SEND_MESSAGE_STATUSES = ['online', 'dnd', 'away', 'ghost']
 
 def can_send_message?(status)
   SEND_MESSAGE_STATUSES.include?(status.to_s)
@@ -157,17 +157,26 @@ while true
     end
     
     @jabber.received_messages do |msg|
-      RAILS_DEFAULT_LOGGER.debug("Panoptibot: Received Message of type #{msg.type}")
+      RAILS_DEFAULT_LOGGER.debug("Panoptibot: Message (#{msg.type}) from from #{msg.from.strip.to_s}")
       next unless msg.type == :chat
     
       from_user = User.find_by_login(msg.from.strip.to_s)
+      RAILS_DEFAULT_LOGGER.debug("  Unknown Sender!!!") unless from_user
       next unless from_user
+      
+      unless can_send_message?(from_user.status)
+        RAILS_DEFAULT_LOGGER.debug "  User was not known to be online, marking as 'ghost'"
+        from_user.status = 'ghost'   # sometimes users won't send presence updates but still be online
+        from_user.save
+      end
     
       next if parse_command(msg.body, from_user)
       Message.new(:body => msg.body, :nick => from_user.nick, :im_userid => msg.from.strip.to_s, :user => from_user).save
-    
+      
+      RAILS_DEFAULT_LOGGER.debug("  broadcasting the message")
       online_users.each do |u|
         next if u.login == from_user.login # don't send the message to the originating user
+        RAILS_DEFAULT_LOGGER.debug("    to #{u.login}")
         send_message(u, msg.body, from_user)
       end
     end

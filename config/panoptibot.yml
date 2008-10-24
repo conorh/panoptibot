@@ -1,0 +1,13 @@
+development:
+  xmpp_account: someone@gmail.com
+  xmpp_password: someone
+  twitter_account: panoptibot
+  twitter_password: someone
+  
+test:
+  username: 
+  password: 
+
+production:
+    username: 
+    password:

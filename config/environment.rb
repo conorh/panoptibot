@@ -68,4 +68,18 @@ Rails::Initializer.run do |config|
 
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
-end 
+end
+
+# APP_CONFIG Defaults:
+APP_CONFIG_DEFAULTS = {
+  :bot_name => "panoptibot",
+  :base_url => "http://localhost:3000"
+}
+config = APP_CONFIG_DEFAULTS.symbolize_keys
+config = config.merge(YAML.load_file(File.join(RAILS_ROOT, 'config', 'panoptibot.yml'))[RAILS_ENV].symbolize_keys)
+config = config.merge(YAML.load_file(File.join(ENV['HOME'], '.panoptibot.yml'))[RAILS_ENV].symbolize_keys) if ENV['HOME'] && File.exist?(File.join(ENV['HOME'], '.panoptibot.yml'))
+
+APP_CONFIG = config
+
+require 'interfaces/master'
+InterfaceMaster.run_all

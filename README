@@ -1,31 +1,38 @@
 == PANOPTIBOT ==
 
-A very simple Jabber (XMPP) chat room bot. At the core it receives messages from participants and echoes the messages to the other participants. It functions pretty much like an IRC channel. It uses the XMPP4r-simple and XMPP4r libraries.
+A very simple Jabber (XMPP) and Twitter chat room bot.
 
-Features:
-* Keeps a history of the chat in a database.
-* Supports commands like:
-  /who - who is online currently
-  /nick - change your nickname displayed to the other participants
-  /quiet - stop receiving messages temporarily (and /resume)
-  /history - show a history of the chat
-  /search - search the history of the chat. 
-* Web interface with login for browsing the chat history.
+At the core it receives messages from participants and echoes the messages to the other participants. It functions pretty much like an IRC channel. It uses the XMPP4r-simple, XMPP4R and Twitter4R libraries.
+
+XMPP Chat Features:
+ * Echo messages from one participant to all others.
+ * Supports commands like:
+     /who     - who is online currently
+     /nick    - change your nickname displayed to the other participants
+     /quiet   - stop receiving messages temporarily (and /resume)
+     /history - show a history of the chat
+     /search  - search the history of the chat. 
+ 
+Twitter Chat Features:
+ * Post direct messages sent to one account as status messages for that account. If you make that account private, and have your users follow it, they can 'chat' with each other by sending direct messages to the bot account.
+
+Web Features:
+ * You can browse the message history.
 
 == Usage ==
 
-1. Edit bots.yml and enter a user id and password for the bot. The user id should be the Jabber address - so an example for a gTalk account would be someuser@gmail.com
+1. Edit panoptibot.yml and enter account information for jabber and twitter. The jabber account be the full Jabber address - so an example for a gTalk account would be someuser@gmail.com
 
 2. Run "rake db/migrate" to create your local database (using sqlite, or change database.yml to suit your needs)
 
-3. Run the bot script:
-  $ ruby app/panoptibot.
-
-4. Add yourself to the bot by using ruby script/console (after this you can add user to the bot using the /add command on the bot.)
+3. Add yourself to the bot by using ruby script/console (after this you can add user to the bot using the /add command on the bot.)
   $ ruby script/console
   Loading development environment (Rails 2.1.1)
   >> User.create(:login => "someuser@gmail.com", :password => "somepassword", :password_confirmation => "somepassword")
   => #<User id: 2, login: "someuser@gmail.com", status: "offline", nick: nil, email: nil ....
   >> exit
 
-5. Add the bot user as a 'friend' (register for presence notifications) using your IM client.
+4. Run the app.
+  $ ruby script/server.
+
+5. Add the bot user as a 'friend' (register for presence notifications) using your IM client. Follow the bot account in twitter.
